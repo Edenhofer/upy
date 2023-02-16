@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "upy"
+authors = [
+    {name = "Gordian Edenhofer", email = "gordian.edenhofer@gmail.com"},
+]
+description = "Useful python utilities"
+readme = "README.md"
+requires-python = ">=3.10"
+keywords = ["utiltities", "tqdm", "progress_bar", "hashing", "fast", "standalone"]
+license = {text = "BSD-3-Clause"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    "requests",
+]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[tool.setuptools.packages.find]
+include = ["upy", "upy.*"]
+exclude = ["src", "src.*"]

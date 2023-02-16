@@ -1,0 +1,44 @@
+# Disregard editor configurations
+.vscode/
+
+# Skip temporary files created non-explicitly and backup files
+*~
+*.swp
+*.swo
+
+# Drop programming byte-compiled, optimization and DLL files from the index
+__pycache__/
+*.py[cod]
+*$py.class
+# Skip setuptools remnant
+.eggs/
+*.egg-info/
+build/
+dist/
+# Disregard test cache and coverage reports
+.coverage
+htmlcov/
+.pytest_cache/
+# Skip ipynb
+.ipynb_checkpoints/
+
+# Ignore shelved session files (and stdout plus stderr files produced by SLURM)
+*.npy
+*.out
+*.out.bak
+*.out.dat
+*.out.dir
+*.err
+
+# Ignore binary data
+*.h5
+
+# Ignore generated output in the form of PDF and PNG images
+*.pdf
+*.png
+*.jpg
+
+# Ignore archives, caches and temporary files
+cache/
+tmp/
+archive/
