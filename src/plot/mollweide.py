@@ -34,8 +34,8 @@ def _find_closest(singles, target):
     return idx
 
 
-def ring2mollweide(pxs, xsize=800, dom_name="HPSpace", scheme="RING"):
-    """Converts from HEALPix RING to the Mollweide projection"""
+def healpix2mollweide(pxs, xsize=800, dom_name="HPSpace", scheme="RING"):
+    """Converts from HEALPix to the Mollweide projection"""
     nside = np.sqrt(pxs.size // 12).astype(int)
     res, mask, theta, phi = _mollweide_helper(xsize)
     if dom_name == "HPSpace":
@@ -96,7 +96,7 @@ def immollweide(
         norm = mcolors.Normalize(vmin=vmin, vmax=vmax)
 
     ax.axis(axis)
-    pxs = ring2mollweide(pxs, xsize=xsize, scheme="NEST" if nest else "RING")
+    pxs = healpix2mollweide(pxs, xsize=xsize, scheme="NEST" if nest else "RING")
     im = ax.imshow(pxs, norm=norm, origin="lower", cmap=cmap)
     return im
 
