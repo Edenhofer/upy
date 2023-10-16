@@ -9,7 +9,7 @@ authors = [
 ]
 description = "Useful python utilities"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.9"
 keywords = ["utiltities", "tqdm", "progress_bar", "hashing", "fast", "standalone"]
 license = {text = "BSD-3-Clause"}
 classifiers = [
