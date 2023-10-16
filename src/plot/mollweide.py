@@ -9,15 +9,15 @@ def _mollweide_helper(xsize):
     xsize = int(xsize)
     ysize = xsize // 2
     res = np.full(shape=(ysize, xsize), fill_value=np.nan, dtype=np.float64)
-    xc, yc = (xsize - 1) * 0.5, (ysize - 1) * 0.5
+    xc, yc = xsize * 0.5, ysize * 0.5
     u, v = np.meshgrid(np.arange(xsize), np.arange(ysize))
-    u, v = 2 * (u - xc) / (xc / 1.02), (v - yc) / (yc / 1.02)
+    u, v = 2 * (u - xc) / xc, (v - yc) / yc
 
-    mask = np.where((u * u * 0.25 + v * v) <= 1.)
+    mask = np.where((u**2 * 0.25 + v**2) <= 1.)
     t1 = v[mask]
     theta = 0.5 * np.pi - (
         np.arcsin(
-            2 / np.pi * (np.arcsin(t1) + t1 * np.sqrt((1. - t1) * (1 + t1)))
+            2 / np.pi * (np.arcsin(t1) + t1 * np.sqrt((1 - t1) * (1 + t1)))
         )
     )
     phi = -0.5 * np.pi * u[mask] / np.maximum(
