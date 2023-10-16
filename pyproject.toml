@@ -10,7 +10,10 @@ authors = [
 description = "Useful python utilities"
 readme = "README.md"
 requires-python = ">=3.9"
-keywords = ["utiltities", "tqdm", "progress_bar", "hashing", "fast", "standalone"]
+keywords = [
+    "utiltities", "tqdm", "progress_bar", "hashing", "fast", "standalone",
+    "mollweide", "healpix"
+]
 license = {text = "BSD-3-Clause"}
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -22,6 +25,7 @@ dynamic = ["version"]
 
 [project.optional-dependencies]
 test = ["pytest"]
+plot = ["matplotlib", "ducc0"]
 
 [tool.setuptools.packages.find]
 include = ["upy", "upy.*"]
