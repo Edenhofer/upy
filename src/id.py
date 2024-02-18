@@ -34,15 +34,18 @@ def hashit(obj, n_chars=8, _raw=False, _raise_unknown=False):
             hsh.update(hashit((obj.start, obj.stop, obj.step), _raw=True))
         elif obj is None:
             hsh = blake2b(b"None")
-        elif isinstance(obj, np.ndarray
-                       ) and "ndarray is not C-contiguous" in "".join(e.args):
+        elif isinstance(obj, np.ndarray) and "ndarray is not C-contiguous" in "".join(
+            e.args
+        ):
             hsh = blake2b(obj.reshape(obj.shape, order="C"))
         elif hasattr(obj, "tree_flatten") and callable(obj.tree_flatten):
             hsh = blake2b(bytes(obj.__class__.__name__, "utf-8"))
             hsh.update(hashit(obj.tree_flatten(), _raw=True))
-        elif isinstance(e, BufferError) and any(
-            "only defined for CPU" in a for a in e.args
-        ) and obj.__class__.__name__ == "DeviceArray":
+        elif (
+            isinstance(e, BufferError)
+            and any("only defined for CPU" in a for a in e.args)
+            and obj.__class__.__name__ == "DeviceArray"
+        ):
             # Object is of type JAX DeviceArray; avoid the isinstance check to
             # not depend on jax
             hsh = blake2b(np.asarray(obj))
@@ -63,7 +66,7 @@ def git_reproduce(file_excludes=(":!*.tex", ":!*.bib"), root_dir=None):
     state of all tracked files.
     """
     import os
-    from subprocess import check_output, CalledProcessError
+    from subprocess import CalledProcessError, check_output
 
     about_git = None
 
@@ -81,15 +84,22 @@ def git_reproduce(file_excludes=(":!*.tex", ":!*.bib"), root_dir=None):
         has_git = False
     if has_git:
         head = check_output(git_cmd + ("rev-parse", "HEAD")).decode().strip()
-        br = check_output(git_cmd + ("rev-parse", "--abbrev-ref",
-                                     "HEAD")).decode().strip()
-        dirt = check_output(
-            git_cmd + ("diff-index", "--name-only", "HEAD", "--")
-        ).decode().strip()
+        br = (
+            check_output(git_cmd + ("rev-parse", "--abbrev-ref", "HEAD"))
+            .decode()
+            .strip()
+        )
+        dirt = (
+            check_output(git_cmd + ("diff-index", "--name-only", "HEAD", "--"))
+            .decode()
+            .strip()
+        )
         dirty = dirt != ""
-        patch = check_output(
-            git_cmd + ("diff", "--patch", "HEAD", "--") + file_excludes
-        ).decode().strip()
+        patch = (
+            check_output(git_cmd + ("diff", "--patch", "HEAD", "--") + file_excludes)
+            .decode()
+            .strip()
+        )
         about_git = {"HEAD": head, "branch": br, "dirty": dirty, "patch": patch}
 
     return about_git

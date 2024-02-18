@@ -13,16 +13,12 @@ def _mollweide_helper(xsize):
     u, v = np.meshgrid(np.arange(xsize), np.arange(ysize))
     u, v = 2 * (u - xc) / xc, (v - yc) / yc
 
-    mask = np.where((u**2 * 0.25 + v**2) <= 1.)
+    mask = np.where((u**2 * 0.25 + v**2) <= 1.0)
     t1 = v[mask]
     theta = 0.5 * np.pi - (
-        np.arcsin(
-            2 / np.pi * (np.arcsin(t1) + t1 * np.sqrt((1 - t1) * (1 + t1)))
-        )
+        np.arcsin(2 / np.pi * (np.arcsin(t1) + t1 * np.sqrt((1 - t1) * (1 + t1))))
     )
-    phi = -0.5 * np.pi * u[mask] / np.maximum(
-        np.sqrt((1 - t1) * (1 + t1)), 1e-6
-    )
+    phi = -0.5 * np.pi * u[mask] / np.maximum(np.sqrt((1 - t1) * (1 + t1)), 1e-6)
     phi = np.where(phi < 0, phi + 2 * np.pi, phi)
     return res, mask, theta, phi
 
@@ -78,16 +74,12 @@ def immollweide(
     elif vscale in ("log", "Log"):
         # Workaround for matplotlib's poor treatment of np.nan's on log-scale
         SafeLogNorm = mcolors.LogNorm
-        SafeLogNorm.__call__ = np.errstate(invalid="ignore")(
-            SafeLogNorm.__call__
-        )
+        SafeLogNorm.__call__ = np.errstate(invalid="ignore")(SafeLogNorm.__call__)
         norm = SafeLogNorm(vmin=vmin, vmax=vmax)
     elif isinstance(vscale, tuple) and vscale[0] in ("symlog", "SymLog"):
         # Workaround for matplotlib's poor treatment of np.nan's on log-scale
         SafeSymLogNorm = mcolors.SymLogNorm
-        SafeSymLogNorm.__call__ = np.errstate(invalid="ignore")(
-            SafeSymLogNorm.__call__
-        )
+        SafeSymLogNorm.__call__ = np.errstate(invalid="ignore")(SafeSymLogNorm.__call__)
         kw = vscale[1].copy()
         kw.setdefault("vmin", vmin)
         kw.setdefault("vmin", vmax)
@@ -111,7 +103,7 @@ def moll_plot(
     cbar_aspect=35,
     cbar_pad=0.02,
     cbar_kw: Optional[dict] = {},
-    **kw
+    **kw,
 ):
     import matplotlib.pyplot as plt
 
@@ -128,7 +120,7 @@ def moll_plot(
         "label": cbar_label,
         "shrink": cbar_shrink,
         "aspect": cbar_aspect,
-        "pad": cbar_pad
+        "pad": cbar_pad,
     }.items():
         cbar_kw.setdefault(k, v)
     if kw.get("vmin", None) is not None and kw.get("vmax", None) is not None:
@@ -144,13 +136,7 @@ def moll_plot(
 
 
 def oneshot_moll_plot(
-    fs,
-    nrows=None,
-    ncols=None,
-    figsize=(16, 10),
-    dpi=None,
-    ax_args=None,
-    **moll_kw
+    fs, nrows=None, ncols=None, figsize=(16, 10), dpi=None, ax_args=None, **moll_kw
 ):
     import matplotlib.pyplot as plt
 

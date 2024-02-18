@@ -1,11 +1,11 @@
+import sys
+import typing
 from collections import deque, namedtuple
 from collections.abc import Mapping, Set
 from ctypes import LibraryLoader
 from importlib import reload
 from numbers import Number
-import sys
 from types import ModuleType
-import typing
 
 ZERO_DEPTH_BASES = [str, bytes, Number, range, bytearray, type]
 if hasattr(typing, "_GenericAlias"):
@@ -13,7 +13,7 @@ if hasattr(typing, "_GenericAlias"):
 if hasattr(typing, "_SpecialGenericAlias"):
     ZERO_DEPTH_BASES += [typing._SpecialGenericAlias]
 ZERO_DEPTH_BASES = tuple(ZERO_DEPTH_BASES)
-ZERO_DEPTH_INSTANCES = (LibraryLoader, )
+ZERO_DEPTH_INSTANCES = (LibraryLoader,)
 
 
 Timed = namedtuple("Timed", ("time", "number"), rename=True)
@@ -49,19 +49,18 @@ def getsizeof(obj_0):
             pass  # bypass remaining control flow and return
         elif isinstance(obj, (tuple, list, Set, frozenset, deque)):
             size += sum(inner(i) for i in obj)
-        elif isinstance(obj, Mapping) or hasattr(obj, 'items'):
-            size += sum(inner(k) + inner(v) for k, v in getattr(obj, 'items')())
+        elif isinstance(obj, Mapping) or hasattr(obj, "items"):
+            size += sum(inner(k) + inner(v) for k, v in getattr(obj, "items")())
         # Attempt to traverse custom object
-        if hasattr(obj, 'nbytes'):
+        if hasattr(obj, "nbytes"):
             # Account for `nbytes` only if of correct type
             sz = getattr(obj, "nbytes")
             size += sz if isinstance(sz, int) else 0
-        if hasattr(obj, '__dict__'):
+        if hasattr(obj, "__dict__"):
             size += inner(vars(obj))
-        if hasattr(obj, '__slots__') and getattr(obj, '__slots__') is not None:
+        if hasattr(obj, "__slots__") and getattr(obj, "__slots__") is not None:
             size += sum(
-                inner(getattr(obj, s))
-                for s in obj.__slots__ if hasattr(obj, s)
+                inner(getattr(obj, s)) for s in obj.__slots__ if hasattr(obj, s)
             )
         return size
 
@@ -69,7 +68,7 @@ def getsizeof(obj_0):
 
 
 def pprint_global_memory(
-    globals_, *, exclude=("In", "Out"), exclude_type=(ModuleType, )
+    globals_, *, exclude=("In", "Out"), exclude_type=(ModuleType,)
 ):
     import warnings
 

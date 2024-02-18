@@ -3,10 +3,10 @@
 import re
 
 re_timedelta = (
-    r'^((?P<days>[\.\d]+?)d)'
-    r'?((?P<hours>[\.\d]+?)h)'
-    r'?((?P<minutes>[\.\d]+?)m)'
-    r'?((?P<seconds>[\.\d]+?)s)?$'
+    r"^((?P<days>[\.\d]+?)d)"
+    r"?((?P<hours>[\.\d]+?)h)"
+    r"?((?P<minutes>[\.\d]+?)m)"
+    r"?((?P<seconds>[\.\d]+?)s)?$"
 )
 regex = re.compile(re_timedelta)
 
@@ -33,7 +33,6 @@ def parse_timedelta(time_str):
         ve = f"unable to parse time '{time_str!r}'"
         raise ValueError(ve)
     time_params = {
-        name: float(param)
-        for name, param in parts.groupdict().items() if param
+        name: float(param) for name, param in parts.groupdict().items() if param
     }
     return timedelta(**time_params)
