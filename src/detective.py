@@ -1,6 +1,8 @@
+#!/usr/bin/env python3
+
 import sys
 import typing
-from collections import deque, namedtuple
+from collections import deque
 from collections.abc import Mapping, Set
 from ctypes import LibraryLoader
 from importlib import reload
@@ -14,35 +16,6 @@ if hasattr(typing, "_SpecialGenericAlias"):
     ZERO_DEPTH_BASES += [typing._SpecialGenericAlias]
 ZERO_DEPTH_BASES = tuple(ZERO_DEPTH_BASES)
 ZERO_DEPTH_INSTANCES = (LibraryLoader,)
-
-
-Timed = namedtuple(
-    "Timed",
-    ("time", "number", "repeat", "median", "q16", "q84", "mean", "std"),
-    rename=True,
-)
-
-
-def timeit(stmt, setup=lambda: None, *, number=None, repeat=7):
-    import timeit
-    import numpy as np
-
-    t = timeit.Timer(stmt)
-    if number is None:
-        number, _ = t.autorange()
-
-    setup()
-    t = np.array(t.repeat(number=number, repeat=repeat)) / number
-    return Timed(
-        time=np.median(t),
-        number=number,
-        repeat=repeat,
-        median=np.median(t),
-        q16=np.quantile(t, 0.16),
-        q84=np.quantile(t, 0.84),
-        mean=np.mean(t),
-        std=np.std(t),
-    )
 
 
 def getsizeof(obj_0):
