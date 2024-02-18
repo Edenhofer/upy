@@ -16,18 +16,33 @@ ZERO_DEPTH_BASES = tuple(ZERO_DEPTH_BASES)
 ZERO_DEPTH_INSTANCES = (LibraryLoader,)
 
 
-Timed = namedtuple("Timed", ("time", "number"), rename=True)
+Timed = namedtuple(
+    "Timed",
+    ("time", "number", "repeat", "median", "q16", "q84", "mean", "std"),
+    rename=True,
+)
 
 
-def timeit(stmt, setup=lambda: None, number=None):
+def timeit(stmt, setup=lambda: None, *, number=None, repeat=7):
     import timeit
+    import numpy as np
 
+    t = timeit.Timer(stmt)
     if number is None:
-        number, _ = timeit.Timer(stmt).autorange()
+        number, _ = t.autorange()
 
     setup()
-    t = timeit.timeit(stmt, number=number) / number
-    return Timed(time=t, number=number)
+    t = np.array(t.repeat(number=number, repeat=repeat)) / number
+    return Timed(
+        time=np.median(t),
+        number=number,
+        repeat=repeat,
+        median=np.median(t),
+        q16=np.quantile(t, 0.16),
+        q84=np.quantile(t, 0.84),
+        mean=np.mean(t),
+        std=np.std(t),
+    )
 
 
 def getsizeof(obj_0):
